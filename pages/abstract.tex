@@ -1,0 +1,28 @@
+\chapter{\abstractname}
+
+%TODO: Abstract
+In the past few years, Visual Studio Code has risen tremendously in popularity. Therefore, many development tools and programming languages seek to provide extensions for it. For the interactive theorem prover Isabelle, an extension has already been introduced. But, this extension is still not on par with Isabelle/jEdit, the default choice for users when it comes to working with Isabelle. This is due to issues with mathematical symbols, input methods, and partially missing markup. In this thesis, we improved Isabelle/VSCode by reworking it to mend the above-mentioned issues. To do this, we implemented a new file system for the extension, added support for abbreviations and auto-completion, and added syntax highlighting for panels. Evaluation of the extension before and after the changes shows clearly that performance has been improved. Now, users do not have to wait 20 seconds everytime they open a new theory file. Based on this, the extension has been brought closer to being a valid alternative to Isabelle/jEdit.
+
+
+
+
+\makeatletter
+\ifthenelse{\pdf@strcmp{\languagename}{english}=0}
+{\renewcommand{\abstractname}{Kurzfassung}}
+{\renewcommand{\abstractname}{Abstract}}
+\makeatother
+
+% \chapter{\abstractname}
+
+% %TODO: Abstract in other language
+% \begin{otherlanguage}{english} % TODO: select other language, either ngerman or english !
+
+% \end{otherlanguage}
+
+
+% % Undo the name switch
+% \makeatletter
+% \ifthenelse{\pdf@strcmp{\languagename}{english}=0}
+% {\renewcommand{\abstractname}{Abstract}}
+% {\renewcommand{\abstractname}{Kurzfassung}}
+% \makeatother

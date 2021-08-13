@@ -1,0 +1,110 @@
+% !TeX root = ../main.tex
+
+\chapter{Evaluation}
+\label{chapter:evaluation}
+In this chapter, we evaluate the impact of our changes on the performance of Isabelle/VSCode. Performance is measured within the Isabelle/VSCode extension using the High Resolution Time API. The extension, in this case, is of course running in production mode. We also compare the performance of the extension before and after the changes.
+
+The benchmarks are run with the following specifications, as shown below in \autoref{tab:specs}:
+\begin{table}[h]
+  \centering
+  \begin{tabular}{l r}
+    VSCode version &  1.58.2  x64\\ \hline
+    Distribution & Ubuntu 20.04 focal\\ \hline
+    Kernel & 5.8.0-63-generic\\ \hline
+    Processor & Intel Core i7-8550U\\ \hline
+    RAM & 8 GiB  DDR4\\\
+  \end{tabular}
+  \caption{Table of specifications used for performance benchmarks.}
+  \label{tab:specs}
+\end{table}
+
+\section{Encoding Performance}
+\label{section:encoding}
+As discussed in \Cref{section:symbols}, the encoding and decoding of the files is a process that will happen frequently. We took steps to ensure that it is reasonably efficient, such as using prefix trees and running it asynchronously, to not block execution.
+
+To benchmark the performance of encoding, we used the theory files in the Isabelle distribution. The distribution contains 1758 theory files with sizes ranging from 58 bytes to 375 kB which gives us a good representative sample. For each file we ran 1001 iterations of encoding, to extract the average and median value of the time it takes to encode a file. The results can be seen in \autoref{fig:encode-time}. 
+
+As expected the encode time is heavily dependent on the size of the file. Aside from the file size, encoding is also dependent on the contents of the file. Naturally, a file which contains less latex notations would take less time to encode. The highest average time is 17.18 ms for a file the size of 375 kB and the highest median time is 20.5 ms for a file size of 267 kB. Normally, theory files are not this big. In the \texttt{Isabelle/src} directory the median file size is only 8.7 kB in which case the encoding would take less then 1 ms.
+
+With these data points, we can safely conclude that the performance of our extension will not be negatively affected from encoding.
+
+\begin{figure}[ht]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+    	xlabel=Size in Bytes,
+    	ylabel=Time in milliseconds,
+    	width = 0.8\textwidth
+        ]
+    \addplot table [x=size, y=average, col sep=comma] {data/encode-time-median.csv};
+    \addplot table [x=size, y=median, col sep=comma] {data/encode-time-median.csv};
+    \legend{Average,Median}
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Encode time for all theories in Isabelle. Average and median calculated on 1001 iterations.}
+    \label{fig:encode-time}
+\end{figure}
+
+\section{Server Startup}
+\label{section:startup}
+One area that has been affected by the changes is the server startup time. When we start the server, we also provide it with the current workspace directory, as explained in \Cref{section:symbols}. If this directory contains a ROOT/ROOTS file, we get back information regarding the sessions and the theories that belong to said sessions. This process makes the startup take longer, which can potentially affect the user experience. Other changes to the server might have an influence on the startup time as well but their effect is negligible in comparison.  
+
+In this section, we measure the startup time for the server before the changes and after the changes. Since the startup time after the changes is dependent on how many theories a session has, we measure it for the following sessions: Isabelle (all sessions), Benchmarks, CCL, CTT, Cube, Doc, FOL, FOLP, HOL, LCF, Pure, Sequents, Tools, ZF. Before the changes, the startup time is not dependent on the session so we only have one case. For each case we take the average out of 10 measurements since they are quite time consuming. \autoref{fig:startup-time} illustrates these measurements in a bar chart.
+
+Most sessions are not heavily affected, with most of them being within a second of the old startup time. Only the large sessions, Isabelle, Benchmarks, DOC and HOL, are clearly disadvantaged. The old server version would takes around 12 seconds to start, while now opening all sessions takes 25 seconds. This is a significant difference, but only occurs once at startup.
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+    \begin{axis}[
+        symbolic x coords={Old, Isabelle, Benchmarks, CCL, CTT, Cube, Doc, FOL, FOLP, HOL, LCF, Pure, Sequents, Tools, ZF},
+        xtick=data,
+    	ylabel=Time in seconds,
+        ybar=2*\pgflinewidth,
+        ymin=0,
+        width = 0.7\textwidth,
+        x tick label style={rotate=45,anchor=east}
+      ]
+        \addplot table [x=session, y=time, col sep=comma] {data/startup-time-avg.csv};
+    \end{axis}
+\end{tikzpicture}
+\caption{Times it takes to startup the server before the changes, and after the changes for different sessions. (The bar named Old representing the startup time before the changes.)}
+\label{fig:startup-time}
+\end{figure}
+
+
+\section{User Experienced Delay}
+\label{section:delay}
+The metric that we are now interested is, how long does it take before the user can start typing. In a way, this should represent how much delay the user experiences while working with the extension activated. 
+
+This metric is measured differently in the different versions of the extension. In the old version, the user cannot start working until the decorations from Prettify Symbols Mode are applied to the document, because the editor is temporarily unresponsive. To measure this, it was necessary to add timers inside the Prettify Symbols Mode extension, which was possible, since the extension is open source~\parencite{psm}. The measurements were conducted manually, by opening theory files and waiting for the extension to apply the decorations. We found that on average it takes 23 seconds, before the user can start working on the opened document.
+
+In the new version of the extension, the user can start working immediately after VSCode is started if the workspace is already set up. If it is not setup, then the user would have to wait for the server to start. This was already measured in \autoref{section:startup}, therefore we do not show this case here. We now only measure how much the new Isabelle/VSCode impacts the startup of a VSCode instance. This is done by timing the \texttt{activate} function of the extension. As was the case on the server startup time, the activation time is dependent on number of theories in our sessions. For this reason, we use the same sessions that we used in \autoref{section:startup}. Since this also has to be done manually, by opening and closing VSCode, we only take the average out of 10 measurements. The results of the measurements can be seen below in \autoref{fig:activate-time}.
+
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}
+    \begin{axis}[
+        symbolic x coords={Isabelle, Benchmarks, CCL, CTT, Cube, Doc, FOL, FOLP, HOL, LCF, Pure, Sequents, Tools, ZF},
+        xtick=data,
+    	ylabel=Time in seconds,
+        ybar=2*\pgflinewidth,
+        ymin=0,
+        width = 0.7\textwidth,
+        x tick label style={rotate=45,anchor=east}
+      ]
+        \addplot table [x=session, y=time, col sep=comma] {data/activate-time-avg.csv};
+    \end{axis}
+\end{tikzpicture}
+\caption{Times it takes to activate the Isabelle/VSCode extension, depending on the active session.}
+\label{fig:activate-time}
+\end{figure}
+
+The activation time for the new extension is not insignificant, especially the worst case, where it takes 6 seconds to load all sessions. Regardless, it is still nowhere as impactful to the user as the delay experienced while working with Prettify Symbols Mode. It must be noted, that the delay from Prettify Symbols Mode is incurred every time a document is opened. On the other hand, the user experiences delay from the new Isabelle/VSCode only once, when VSCode is first opened, which is a significant improvement. 
+
+\section{Threats to validity}
+While measuring the performance of our encoding algorithm, it quickly became evident that the algorithm itself is not the bottleneck of the process. The extension is also slowed down by read/write operations that precede and succeed the encoding. Since these operations are completely dependent on the hardware the user is running, it was not suitable to include their performance in our measurements. In any case, we expect that computers with SSDs will run the software efficiently.
+
+The main limitation for the startup and delay evaluation was that they had to be done manually by repeatedly opening and closing the VSCode editor while a version of the extension was active. This prevented us from running a high number of tests which in turn might have skewed the data. 
+
+In \autoref{section:delay}, the measurement comparison between the two versions was obviously not a one-to-one comparison. Since the versions have very different workflows, it is difficult to do direct comparisons. Furthermore, these measurements are also dependent on the execution of other extensions, since all extensions run on a single thread in the Extension Host process~\parencite{vscode-extension-host}. These extensions are not only the extension that the user has installed but, as we established in \autoref{section:vscode}, core features which are built as extensions. For this reasons, the results that one might get are not always consistent.

@@ -1,0 +1,69 @@
+\RequirePackage[l2tabu,orthodox]{nag}
+
+% TODO: decide if one-sided/two-sided
+%\documentclass[headsepline,footsepline,footinclude=false,fontsize=11pt,paper=a4,listof=totoc,bibliography=totoc,BCOR=12mm,DIV=12]{scrbook} % two-sided % original source stated: BCOR=12mm,DIV=12
+\documentclass[headsepline,footsepline,footinclude=false,oneside,fontsize=11pt,paper=a4,listof=totoc,bibliography=totoc,DIV=12]{scrbook} % one-sided
+
+\usepackage{pgf-umlsd} % for sequence diagrams
+\usepackage{packages/tikz-uml} % for class diagrams
+\usepackage[ruled,vlined]{algorithm2e} % for algorithms
+% TODO: change citation style in settings
+\input{settings}
+\usepackage{cleveref}
+
+% TODO: change thesis information
+\newcommand*{\getUniversity}{Technische Universität München}
+\newcommand*{\getFaculty}{Department of Informatics}
+\newcommand*{\getTitle}{Isabelle/VSCode: Editor Improvements and Prover IDE integrations}
+\newcommand*{\getTitleGer}{Isabelle/VSCode: Editor Verbesserungen und Integration der Prover IDE}
+\newcommand*{\getAuthor}{Denis Paluca}
+\newcommand*{\getDoctype}{Bachelor's Thesis in Informatics}
+\newcommand*{\getSupervisor}{Prof. Tobias Nipkow}
+\newcommand*{\getAdvisor}{M.Sc. Fabian Huch}
+\newcommand*{\getSubmissionDate}{15.08.2021}
+\newcommand*{\getSubmissionLocation}{Munich}
+
+\begin{document}
+
+% TODO: decide on used language
+%\selectlanguage{ngerman}
+\selectlanguage{english}
+
+% Set page numbering to avoid "destination with the same identifier has been already used" warning for cover page.
+% (see https://en.wikibooks.org/wiki/LaTeX/Hyperlinks#Problems_with_Links_and_Pages).
+\pagenumbering{alph}
+\input{pages/cover}
+
+\frontmatter{}
+
+\input{pages/title}
+\input{pages/disclaimer}
+\input{pages/acknowledgements} % TODO: if you don't have anyone to thank for or don't wish to publish it, comment this line out.
+\input{pages/abstract}
+\microtypesetup{protrusion=false}
+\tableofcontents{}
+\microtypesetup{protrusion=true}
+
+\mainmatter{}
+
+\input{chapters/01_introduction}
+\input{chapters/02_background}
+\input{chapters/03_implementation}
+\input{chapters/04_evaluation}
+\input{chapters/06_conclusion}
+\input{chapters/05_future_work}
+% TODO: add more chapters here
+
+\appendix{}
+
+% TODO: appendix chapter
+\input{pages/appendix}
+
+\microtypesetup{protrusion=false}
+\listoffigures{}
+\listoftables{}
+\microtypesetup{protrusion=true}
+\printglossaries
+\printbibliography{}
+
+\end{document}

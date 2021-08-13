@@ -1,0 +1,35 @@
+% !TeX root = ../main.tex
+% Add the above to each chapter to make compiling the PDF easier in some editors.
+
+\chapter{Introduction}
+\label{chapter:introduction}
+
+\section{Motivation}
+For the interactive theorem prover \emph{Isabelle}~\parencite{lpi}, the \emph{jEdit IDE}~\parencite{jedit} has been used as the basis to build the \emph{Isabelle/jEdit prover IDE}~\parencite{isabelle_jedit}. To provide the same functionality in a more modern and popular code editor, the Isabelle extension for \emph{VSCode}~\parencite{vscode} (short for Visual Studio Code) was introduced. Although a good portion of the features supported in jEdit are now available for VSCode, the extension has not seen much adoption from users. In its current state, \emph{Isabelle/VSCode}~\parencite{pide} is no match for its jEdit counterpart. This is due to many issues which have cropped up with the extension. The issues that mainly stop it from being a viable alternative are:
+\begin{itemize}
+    \item Performance issues related to the rendering of mathematical symbols.
+    \item Ergonomic issues while working with mathematical symbols.
+    \item Missing input options for mathematical symbols, which are present in jEdit.
+    \item Missing syntax highlighting for different semantic editor perspectives.
+\end{itemize}
+
+The main goal of this project is to alleviate these issues so that Isabelle/VSCode becomes an attractive option to users. In order to achieve this, the focus has been set on the following objectives:
+\begin{itemize}
+    \item Add first-class support for Unicode characters. This should remove the performance and ergonomic issues with the mathematical symbols.
+    \item Provide abbreviation and auto-completion support for the extension.
+    \item Add the missing syntax highlighting for the semantic editor perspectives.
+\end{itemize}
+
+Of course, some features, which are available in jEdit, would still be missing. Nonetheless, this project should be a major stride towards wider user adoption for Isabelle/VSCode.
+
+\section{Outline}
+\Cref{chapter:background} starts the thesis with a short rundown of preliminary information about Isabelle, VSCode, and the Language Server Protocol.
+
+In \Cref{chapter:implementation}, we describe the implementation details of the project. We start with adding the syntax highlighting in \Cref{section:state-panel}. Then, in \Cref{section:symbols}, we deal with the performance issues related to the mathematical symbols. In the last section of the chapter, we add new ways for a user to input mathematical symbols.
+
+In \Cref{chapter:evaluation}, we evaluate the effect of our changes on the performance of the extension. We also compare the performance of the existing solution and the new solution.
+
+
+\Cref{chapter:conclusion} concludes the thesis with a summary of the goals reached during the course of the thesis and some closing remarks on the project.
+
+\Cref{chapter:future_work} describes new features which can be added to Isabelle/VSCode by future projects. Moreover, it lists other code editors for which the work done here may become relevant.

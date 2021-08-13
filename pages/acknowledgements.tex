@@ -1,0 +1,20 @@
+\makeatletter
+\ifthenelse{\pdf@strcmp{\languagename}{english}=0}
+{\addcontentsline{toc}{chapter}{Acknowledgments}}
+{\addcontentsline{toc}{chapter}{Danksagungen}}
+\makeatother
+\thispagestyle{empty}
+
+\vspace*{20mm}
+
+\begin{center}
+\makeatletter
+\ifthenelse{\pdf@strcmp{\languagename}{english}=0}
+{\usekomafont{section} Acknowledgments}
+{\usekomafont{section} Danksagungen}
+\makeatother
+\end{center}
+
+\vspace{10mm}
+I would like to thank the Chair of Logic and Verification and Prof. Nipkow for giving me the opportunity to do this thesis. I would like to express my gratitude to my advisor, Fabian Huch, for all his guidance during the past four months. 
+\cleardoublepage{}

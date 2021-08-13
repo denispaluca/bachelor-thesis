@@ -1,0 +1,34 @@
+% !TeX root = ../main.tex
+
+\chapter{Conclusion}
+\label{chapter:conclusion}
+In this chapter, we conclude the thesis by summarizing the goals reached during the course of the project. We will also compare the new solution with the current state of the existing solution. 
+
+\section{Goals Reached}
+\label{section:goals}
+
+\subsection{Syntax Highlighted Panels}
+The existing solution was missing syntax highlighting and clickable items for both the output and state panel. After the changes, the syntax highlighting for our panels works perfectly with two main themes, namely the dark and light theme of VSCode.  The GUI elements have also been updated, to be consistent with the design of VSCode.
+
+The solution we developed for this issue is a general solution, which can be applied to future panels as well. Consequently, future panels will be able to support all the previously mentioned features with ease.
+
+\subsection{Unicode Characters}
+As discussed in \Cref{section:symbols}, the mathematical symbols in the existing solution are merely optical illusions and not true Unicode characters. We introduced the Isabelle file system, to deal with this issue. In the new file system, the Isabelle notations are encoded to represent the corresponding Unicode character. 
+
+Working with these symbols is now much easier for the user. The symbols are treated as any other character. Interacting with the symbols in the existing solution was highly unreliable, with the editor reacting unpredictably.
+
+\subsection{Fix Performance Issues}
+Since all the performance issues were directly caused by the rendering of the mathematical symbols, reworking the solution solved these issues. In \Cref{chapter:evaluation}, we showed that the new solution surpasses the existing solution in terms of performance. The user experience has definitely been improved.
+
+We also showed in \Cref{section:encoding}, that file size only affects performance marginally, which is not noticeable to the user. In contrast to that, the existing solution would cause problems with the VSCode rendering engine when a big theory file was opened.
+
+An added benefit of the new solution is that the Prettify Symbols Mode extension does not have to be used anymore. Not only does this remove an outdated dependency, but it also simplifies the setup of Isabelle/VSCode. The user will no longer have to download and configure a third-party extension, to be able to work with mathematical symbols.
+
+\subsection{Abbreviations and Auto-completion}
+To improve the user experience even further and to bring it more in line with that of Isabelle/jEdit, we added support for abbreviations and auto-completion. With the help of these features, users can input mathematical symbols without having to write the whole Isabelle notation.  They have the option to use abbreviations, which get automatically replaced with the corresponding symbol, or auto-completed Isabelle notations.
+
+We also added the option to choose what level of abbreviation replacement the user wants. In the extension settings, the user can choose between no replacement, replacing unique non-alpha-numeric abbreviations, or replacing all unique abbreviations. Abbreviations that are not unique do not get replaced, but the user gets auto-completion suggestions.
+
+
+\section{Closing Remarks}
+After the comparisons made above in \Cref{section:goals}, we can say with certainty, that the developed solution has better performance than the existing solution and improves usability greatly. This is an important step towards making Isabelle/VSCode a viable alternative to jEdit. The Isabelle specific functionality, implemented for the VSCode extension, enable users to apply the same workflows that they have already established with jEdit. Moving forward, with new features being added to Isabelle/VSCode, we expect that it starts to see adoption from more users.
